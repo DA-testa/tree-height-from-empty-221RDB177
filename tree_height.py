@@ -4,30 +4,36 @@ import sys
 import threading
 
 def compute_height(n, parents):
-   
-    tree = {}
-    for i in range(n):
-        tree[i] = []
-    for i in range(n):
-        if parents[i] == -1:
-            root = i
+    # Create a dictionary to store the children of each node
+    children = {}
+    for node, parent in enumerate(parents):
+        if parent == -1:
+            root = node
         else:
-            tree[parents[i]].append(i)
+            if parent in children:
+                children[parent].append(node)
+            else:
+                children[parent] = [node]
 
-   
-    def height(node):
-        if not tree[node]:
-            return 1
-        else:
-            return max(height(child) for child in tree[node]) + 1
+    # Use a stack to traverse the tree and compute its height
+    stack = [(root, 0)]
+    max_height = 0
+    while stack:
+        node, height = stack.pop()
+        max_height = max(max_height, height)
+        if node in children:
+            for child in children[node]:
+                stack.append((child, height + 1))
 
-    return height(root)
+    return max_height
 
+if __name__ == '__main__':
+    # Read input from standard input
+    n = int(input())
+    parents = list(map(int, input().split()))
 
-n = int(input())
-parents = list(map(int, input().split()))
-print(compute_height(n, parents))
-
+    # Compute the height of the tree and print the result
+    print(compute_height(n, parents))
     
 sys.setrecursionlimit(10**7)  
 threading.stack_size(2**27)   
