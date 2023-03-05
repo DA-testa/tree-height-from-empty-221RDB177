@@ -17,15 +17,15 @@ def compute_tree_height(node):
 
 
 def main():
-    # Read input
+  
     n = int(input())
     parents = list(map(int, input().split()))
 
-    # Create tree nodes
+   
     nodes = [TreeNode(i) for i in range(n)]
     root = None
 
-    # Build tree
+   
     for i, parent in enumerate(parents):
         if parent == -1:
             root = nodes[i]
@@ -34,7 +34,7 @@ def main():
             
             tree_height = compute_tree_height(root)
 
-    # Print result
+   
     print(tree_height)
     
     
