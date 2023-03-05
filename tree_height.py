@@ -4,7 +4,7 @@ import sys
 import threading
 
 def compute_height(n, parents):
-    # Build the tree
+   
     tree = {}
     for i in range(n):
         tree[i] = []
@@ -14,7 +14,7 @@ def compute_height(n, parents):
         else:
             tree[parents[i]].append(i)
 
-    # Compute the height recursively
+   
     def height(node):
         if not tree[node]:
             return 1
@@ -23,7 +23,7 @@ def compute_height(n, parents):
 
     return height(root)
 
-# Read input and output the result
+
 n = int(input())
 parents = list(map(int, input().split()))
 print(compute_height(n, parents))
