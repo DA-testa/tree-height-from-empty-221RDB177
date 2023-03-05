@@ -4,48 +4,30 @@ import sys
 import threading
 
 def compute_height(n, parents):
-   
-
- children = [[] for _ in range(n)] # initialize empty list for each node
-    for i, parent in enumerate(parents):
-        if parent == -1: # found root node
+    # Build the tree
+    tree = {}
+    for i in range(n):
+        tree[i] = []
+    for i in range(n):
+        if parents[i] == -1:
             root = i
         else:
-            children[parent].append(i) # add i-th node as a child of parent node
-    
-    # compute height of the tree
-    def compute_depth(node):
-        if not children[node]: # leaf node
+            tree[parents[i]].append(i)
+
+    # Compute the height recursively
+    def height(node):
+        if not tree[node]:
             return 1
-        max_depth = 0
-        for child in children[node]:
-            depth = compute_depth(child)
-            max_depth = max(max_depth, depth)
-        return max_depth + 1
+        else:
+            return max(height(child) for child in tree[node]) + 1
 
-    return compute_depth(root)
+    return height(root)
 
+# Read input and output the result
+n = int(input())
+parents = list(map(int, input().split()))
+print(compute_height(n, parents))
 
-def main():
-    # read input from standard input or file
-    input_type = input()
-
-    if 'I' in input_type: # read from standard input
-        n = int(input())
-        parents = list(map(int, input().split()))
-        height = compute_height(n, parents)
-        print(height)
-    elif 'F' in input_type: # read from file
-        filename = input()
-        with open(filename, 'r') as f:
-            n = int(f.readline())
-            parents = list(map(int, f.readline().split()))
-            height = compute_height(n, parents)
-            print(height)
-    else:
-        print("Error: Invalid input type.")
-        exit()
-    
     
 sys.setrecursionlimit(10**7)  
 threading.stack_size(2**27)   
