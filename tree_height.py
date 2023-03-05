@@ -3,39 +3,16 @@
 import sys
 import threading
 
-class TreeNode:
-    def __init__(self, val):
-        self.val = val
-        self.children = []
-        
-
-def compute_tree_height(node):
-    if not node.children:
-        return 1
-    child_heights = [compute_tree_height(child) for child in node.children]
-    return max(child_heights) + 1
-
+def compute_height(n, parents):
+    max_height = 0
+    return max_height
 
 def main():
   
-    n = int(input())
-    parents = list(map(int, input().split()))
+    n = int(input("Enter the number of nodes: "))
+    parents = list(map(int, input("Enter the parent of each node separated by space: ").split()))
 
-   
-    nodes = [TreeNode(i) for i in range(n)]
-    root = None
-
-   
-    for i, parent in enumerate(parents):
-        if parent == -1:
-            root = nodes[i]
-        else:
-            nodes[parent].children.append(nodes[i])
-            
-            tree_height = compute_tree_height(root)
-
-   
-    print(tree_height)
+    print("Maximum height of the tree:", compute_height(n, parents))
     
     
 sys.setrecursionlimit(10**7)  
