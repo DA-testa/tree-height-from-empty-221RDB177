@@ -3,7 +3,7 @@ import threading
 import numpy as np
 
 
-def compute_tree_height(n: int, parents: List[int]) -> int:
+def compute_height(n, parents):
     children = {i: [] for i in range(n)}
     root_nodes = []
     for i, parent in enumerate(parents):
@@ -12,13 +12,13 @@ def compute_tree_height(n: int, parents: List[int]) -> int:
         else:
             children[parent].append(i)
 
-    def get_depth(node: int, curr_depth: int) -> int:
+    def get_depth(node, fd):
         if not children[node]:
-            return curr_depth
+            return fd
         else:
             max_depth = 0
             for child in children[node]:
-                child_depth = get_depth(child, curr_depth + 1)
+                child_depth = get_depth(child, fd + 1)
                 max_depth = max(max_depth, child_depth)
             return max_depth
 
@@ -30,7 +30,7 @@ def compute_tree_height(n: int, parents: List[int]) -> int:
     return max_height + 1
 
 
-def main() -> None:
+def main():
     input_mode = input("Enter F (for file) or I (for input): ")
     if "I" in input_mode:
         n = int(input())
@@ -50,7 +50,7 @@ def main() -> None:
             print("Error. Try again")
             return
 
-    print(compute_tree_height(n, parents))
+    print(compute_height(n, parents))
 
 
 sys.setrecursionlimit(10 ** 7)
