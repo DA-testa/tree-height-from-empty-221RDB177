@@ -1,57 +1,58 @@
 import sys
 import threading
-import numpy
+import numpy as np
 
 
-def compute_height(n, parents):
+def compute_tree_height(n: int, parents: List[int]) -> int:
     children = {i: [] for i in range(n)}
-    root = [] 
-
+    root_nodes = []
     for i, parent in enumerate(parents):
         if parent == -1:
-            root.append(i)
-        else: 
-            children[parent].append(i)
- 
-    def fDepth(node, fd):
-        if not children[node]:
-            return fd 
+            root_nodes.append(i)
         else:
-            mDepth = 0 
+            children[parent].append(i)
+
+    def get_depth(node: int, curr_depth: int) -> int:
+        if not children[node]:
+            return curr_depth
+        else:
+            max_depth = 0
             for child in children[node]:
-                cDepth = fDepth(child, fd+1) 
-                mDepth = max(mDepth, cDepth)
-            return mDepth 
- 
-    mHight =  0 
-    for r in root:
-        tHeight = fDepth(r, 0)
-        mHight = max(mHight, tHeight) 
+                child_depth = get_depth(child, curr_depth + 1)
+                max_depth = max(max_depth, child_depth)
+            return max_depth
 
-    return mHight + 1
+    max_height = 0
+    for root in root_nodes:
+        tree_height = get_depth(root, 0)
+        max_height = max(max_height, tree_height)
 
-def main():
-    answer = input("Enter F (for file) or I (for input): ")
-    if "I" in answer:
+    return max_height + 1
+
+
+def main() -> None:
+    input_mode = input("Enter F (for file) or I (for input): ")
+    if "I" in input_mode:
         n = int(input())
-        parents = list(map(int,input().split()))
-    elif "F" in answer:
-        fileName = input("Enter file name: ")
-        file = "./test/" + fileName
-        if "a" not in fileName:
+        parents = list(map(int, input().split()))
+    elif "F" in input_mode:
+        filename = input("Enter file name: ")
+        file_path = f"./test/{filename}"
+        if "a" not in filename:
             try:
-                with open(file) as testFile:
-                    n = int(testFile.readline())
-                    parents = list(map(int, testFile.readline().split()))
+                with open(file_path) as test_file:
+                    n = int(test_file.readline())
+                    parents = list(map(int, test_file.readline().split()))
             except Exception as error:
                 print("Error:", str(error))
                 return
         else:
             print("Error. Try again")
             return
-    
-    print(compute_height(n, parents))
 
-sys.setrecursionlimit(10**7)
-threading.stack_size(2**27)
+    print(compute_tree_height(n, parents))
+
+
+sys.setrecursionlimit(10 ** 7)
+threading.stack_size(2 ** 27)
 threading.Thread(target=main).start()
